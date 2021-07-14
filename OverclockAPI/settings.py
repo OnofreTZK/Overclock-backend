@@ -30,6 +30,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'core.models.BearerAuthentication',
+    )
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +50,7 @@ INSTALLED_APPS = [
 
     # Local Apps(Module)
     'core',
+    'usuario'
 ]
 
 MIDDLEWARE = [
