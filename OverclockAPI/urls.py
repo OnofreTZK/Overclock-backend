@@ -8,10 +8,11 @@ from usuario.api.viewsets import UsuarioViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'usuario', UsuarioViewSet, basename='UsuarioViewSet')
+#router.register(r'usuario/registro/', UsuarioViewSet.as_view(), basename='UsuarioViewSet')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('usuario/registro/', UsuarioViewSet.as_view()),
     path('admin/', admin.site.urls),
     path('auth/', AuthComToken.as_view()),
 ]

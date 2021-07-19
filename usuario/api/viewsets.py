@@ -1,41 +1,42 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
-from rest_framework.filters import SearchFilter
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+#from rest_framework.filters import SearchFilter
+#from rest_framework.decorators import action
+#from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from usuario.models import Usuario
 from .serializers import UsuarioSerializer
+from rest_framework import status
 
-
-class UsuarioViewSet(ModelViewSet):
+class UsuarioViewSet(CreateAPIView):
 
     serializer_class = UsuarioSerializer
     queryset = Usuario.objects.all()
-
-
-
-    '''
-    #POST
+    authentication_classes = []
+    
     def create(self, request, *args, **kwargs):
+        
+        serializer = UsuarioSerializer(data=request.data)
 
-        # Validate credentials
-        user_credentials = request.query_params
+        if serializer.is_valid(self):
+            self.perform_create(serializer.data)
+        
+            headers = self.get_success_headers(serializer.data)
+        
 
-        users = get_user_model().objects.all()
+            user = User.objects.create_user(username= serializer.data.username, email= seriializer.data.email,
+                                            password= serializer.data.password)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data= {
+                'error' : 'formulário de usuário não foi preenchido corretamente',
+                'status' : 400})
 
-        if users.count(get_username() == user_credentials['username']) > 0:
-            #response.status_code = 400
-            #response['error'] = "Usuário ja existe, por favor verifique as credenciais!"
-            #return response
+    @classmethod
+    def get_extra_actions(cls):
+        return []
 
-        user = User.objects.create_user(user_credentials['username'], user_credentials['email'],
-                                            user_credentials['password'])
-                                            
 
-        # Validate data
-        user_form_data = request.data
-    '''
 
 
