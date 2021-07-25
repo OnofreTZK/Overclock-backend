@@ -8,15 +8,15 @@ from rest_framework import status
 
 
 class UsuarioController(ModelSerializer):
-    
+
     class Meta:
         model = Usuario
         fields = ('id', 'id_tipo_usuario', 'tipo_usuario', 'username', 'password',
                   'email', 'nome', 'telefone', 'cpf', 'data_nascimento')
-    
+
     # ID USER TYPE
     def get_user_type(self, id_int):
-        
+
         return {
             0: 'ADMIN',
             1: 'SUPORTE',
@@ -31,7 +31,7 @@ class UsuarioController(ModelSerializer):
         return {
             201 : status.HTTP_201_CREATED,
         }[status_code]
-    
+
     # SUCCESS RESPONSE
     def success_response(self, status_code, headers):
 
@@ -39,7 +39,7 @@ class UsuarioController(ModelSerializer):
 
     # ERROR TYPE
     def get_error_type(self, status_code):
-        
+
         return {
             400 : status.HTTP_400_BAD_REQUEST,
             409 : status.HTTP_409_CONFLICT,
@@ -54,23 +54,23 @@ class UsuarioController(ModelSerializer):
 
     # CREATE USER
     def create_user(self, post_request):
-       
+
         if self.is_valid(post_request):
             # If user already exists return error.
-            if User.objects.filter(username=self.validated_data['username']).exists(): 
-                return self.error_response(409, 
+            if User.objects.filter(username=self.validated_data['username']).exists():
+                return self.error_response(409,
                                       'Nome de usuário ja existe! Verifique as credenciais.')
-            else: 
-                
+            else:
+
                 post_request.perform_create(self)
 
                 headers = post_request.get_success_headers(self.validated_data)
-            
-                user = User.objects.create_user(username= self.validated_data['username'], 
+
+                user = User.objects.create_user(username= self.validated_data['username'],
                                                 email= self.validated_data['email'],
                                                 password= self.validated_data['password'])
 
                 return self.success_response(201, headers)
-        else: 
-            return self.error_response(400, 
+        else:
+            return self.error_response(400,
                                       'Formulário de usuário não foi preenchido corretamente')

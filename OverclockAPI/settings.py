@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'core.models.BearerAuthentication',
+        'auth.models.BearerAuthentication',
     )
 }
 
@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Local Apps(Module)
-    'core',
-    'usuario'
+    'usuario',
+    'produto'
 ]
 
 MIDDLEWARE = [

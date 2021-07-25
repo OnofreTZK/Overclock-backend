@@ -9,9 +9,12 @@ from auth.views import AuthComToken
 # Usuario
 from usuario.views import UsuarioCadastroView
 
+# Produto
+from produto.views import ProdutoView
+
 
 router = routers.DefaultRouter()
-#router.register(r'usuario/registro/', UsuarioViewSet.as_view(), basename='UsuarioViewSet')
+router.register(r'produto', ProdutoView, basename='produtosCRUD')
 
 urlpatterns = [
     path('', include(router.urls)),
