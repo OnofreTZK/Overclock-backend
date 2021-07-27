@@ -5,8 +5,9 @@ class Usuario(models.Model):
 
     id_tipo_usuario = models.IntegerField(
         verbose_name='id-tipo-usuario',
+        default= 1,
         null= False,
-        blank= False,
+        blank= True,
     )
 
     tipo_usuario = models.TextField(
@@ -33,17 +34,17 @@ class Usuario(models.Model):
 
     nome = models.TextField(
         null= False,
-        blank= False
+        blank= True
     )
 
     telefone = models.TextField(
         null= False,
-        blank= False,
+        blank= True,
     )
 
     cpf = models.TextField(
         null= False,
-        blank= False,
+        blank= True,
     )
 
     data_nascimento = models.DateField(
