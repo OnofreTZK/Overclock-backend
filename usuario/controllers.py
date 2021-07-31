@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from usuario.models import Usuario
+from usuario.services import UsuarioService
 
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -52,25 +53,40 @@ class UsuarioController(ModelSerializer):
             'error' : message,
             'status' : status_code})
 
+    # SERVICE LAYER CALL
+    def validate_business_logic(self, request, django_users):
+
+        service = UsuarioService(request['username'],
+                                 request['cpf'],
+                                 request['email'],
+                                 request['telefone'],
+                                 django_users)
+
+        if django_users.objects.filter(username=self.request['username']).exists():
+            return self.error_response(409,
+                                  'Nome de usuário ja existe! Verifique as credenciais.')
+        else:
+
+            post_request.perform_create(self)
+
+            headers = post_request.get_success_headers(request.validated_data)
+
+            user = User.objects.create_user(username= request.validated_data['username'],
+                                            email= request.validated_data['email'],
+                                            password= request.validated_data['password'])
+
+            return self.success_response(201, headers)
+
     # CREATE USER
     def create_user(self, post_request):
 
+        # Validate serializer(controller) - django requirement
         if self.is_valid(post_request):
-            # If user already exists return error.
-            if User.objects.filter(username=self.validated_data['username']).exists():
-                return self.error_response(409,
-                                      'Nome de usuário ja existe! Verifique as credenciais.')
+
+            if self.validate_business_logic(self.validated_data, User):
+                print("passtest")
             else:
-
-                post_request.perform_create(self)
-
-                headers = post_request.get_success_headers(self.validated_data)
-
-                user = User.objects.create_user(username= self.validated_data['username'],
-                                                email= self.validated_data['email'],
-                                                password= self.validated_data['password'])
-
-                return self.success_response(201, headers)
+                print("Test")
         else:
             return self.error_response(400,
                                       'Formulário de usuário não foi preenchido corretamente')
