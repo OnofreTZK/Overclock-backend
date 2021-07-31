@@ -6,3 +6,9 @@ class ProdutoView(ModelViewSet):
 
     queryset = Produto.objects.all()
     serializer_class = ProdutoController
+
+    def create(self, request, *args, **kwargs):
+
+        controller = ProdutoController(data=request.data)
+
+        return controller.create_product(self)
