@@ -69,6 +69,6 @@ class AuthController(object):
                     })
         else:
             return Response(status= status.HTTP_400_BAD_REQUEST, data= {
-                'error' : 'Formulário de usuário não foi preenchido corretamente',
+                'error' : 'Nome de usuário e/ou senha incorreto(s).',
                 'status' : 400,
             })
