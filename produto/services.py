@@ -3,7 +3,7 @@ from produto.models import Produto
 class ProdutoService(object):
 
     nome_produto = ""
-    preco_produto = int
+    preco_produto = float
     promocao = bool
     desconto = float
     caminho_imagem = ""
